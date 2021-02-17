@@ -35,5 +35,5 @@ if __name__ == "__main__":
         mets_counter[mets] = count/total_num
 
     with open("mets.txt","w") as f:
-        for mets,count in mets_counter.items():
-            f.write(f"{mets}\t{count}\n")
+        for mets,probability in mets_counter.items():
+            f.write(f"{mets}\t{probability}\n")
