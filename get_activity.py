@@ -26,7 +26,7 @@ def format_mets_1min(mets_1min):
 if __name__ == "__main__":
     db_access = DBAccess()
     headers = {"content-type": "application/json"}
-    for days_offset in range(0,10):
+    for days_offset in range(0,30):
         responce = requests.get(create_url(days_offset), headers=headers)
         data = responce.json()
         day_text = create_date_str(days_offset)
