@@ -50,6 +50,12 @@ class DBapi:
             cursor.execute(f"SELECT * FROM {table}")
             return [des[0] for des in cursor.description]
 
+    def pick_column(self, table, column):
+        with self._connection.cursor() as cursor:
+            cursor.execute(f"SELECT {column} FROM {table} ORDER BY date;")
+            result = cursor.fetchall()
+            return [fetch[0] for fetch in result]
+
     def pick_mets_1min(self, offset=None, limit=None):
         with self._connection.cursor() as cursor:
             q_offset = f" OFFSET {offset} " if offset else ""
