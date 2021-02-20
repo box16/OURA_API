@@ -2,8 +2,6 @@ import requests
 import json
 import os
 import datetime
-import collections
-import pprint
 
 
 class OuraAccess:
@@ -23,13 +21,10 @@ class OuraAccess:
         url = f"{self._base_url}{target}?start={date}&end={date}&{self._token}"
         return url
 
-    def format_mets_1min(self, mets_1min):
-        return ",".join([str(mets) for mets in mets_1min])
-
     def collect_daily_summaries(self, target, days_offset):
         headers = {"content-type": "application/json"}
         date_str = self.create_date_str(days_offset)
         api_url = self.create_url(target, date_str)
         responce = requests.get(api_url, headers=headers)
         data = responce.json()
-        return data[target][0]
+        return (date_str , data[target][0])
