@@ -32,24 +32,23 @@ class DBapi:
             self._connection.commit()
 
     def create_update_query(self, table, date, data):
-        column = ",".join(
-            [key for key, value in sorted(data.items(), key=lambda x:x[0]) if key in self.get_column_names(table)])
+        column = ",".join([key for key, value in sorted(
+            data.items(), key=lambda x:x[0]) if key in self.get_column_names(table)])
         value = ",".join([str(value) for key, value in sorted(
             data.items(), key=lambda x:x[0]) if key in self.get_column_names(table)])
         return f"UPDATE {table} SET ({column}) = ({value}) WHERE date='{date}';"
 
     def create_insert_query(self, table, date, data):
-        column = ",".join(
-            [key for key, value in sorted(data.items(), key=lambda x:x[0]) if key in self.get_column_names(table)])
+        column = ",".join([key for key, value in sorted(
+            data.items(), key=lambda x:x[0]) if key in self.get_column_names(table)])
         value = ",".join([str(value) for key, value in sorted(
             data.items(), key=lambda x:x[0]) if key in self.get_column_names(table)])
         return f"INSERT INTO {table}(date,{column}) VALUES ('{date}',{value});"
 
-    def get_column_names(self,table):
+    def get_column_names(self, table):
         with self._connection.cursor() as cursor:
             cursor.execute(f"SELECT * FROM {table}")
             return [des[0] for des in cursor.description]
-
 
     def pick_mets_1min(self, offset=None, limit=None):
         with self._connection.cursor() as cursor:

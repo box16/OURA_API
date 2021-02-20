@@ -27,4 +27,4 @@ class OuraAccess:
         api_url = self.create_url(target, date_str)
         responce = requests.get(api_url, headers=headers)
         data = responce.json()
-        return (date_str , data[target][0])
+        return (date_str, data[target][0])
