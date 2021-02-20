@@ -1,7 +1,6 @@
 from oura_access import OuraAccess
 from db_api import DBapi
 import datetime
-import re
 
 
 def format_activity(activity):

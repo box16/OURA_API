@@ -3,12 +3,12 @@ import numpy
 import os
 import shutil
 from db_api import DBapi
+import traceback
+import re
 
 db_api = DBapi()
 exclusion_list = {
     "sleep": [
-        "bedtime_start",
-        "bedtime_end",
         "hypnogram_5min",
         "hr_5min",
         "rmssd_5min"],
@@ -27,6 +27,16 @@ os.mkdir("figure")
 objective = db_api.pick_column(target_table, target_column)
 
 
+def scatter(explanatory, objective, table, column):
+    fig = plt.figure()
+    plt.scatter(explanatory, objective)
+    plt.ylabel(f"{target_table}:{target_column}")
+    plt.xlabel(f"{table}:{column}")
+    fig.savefig(
+        f"./figure/{target_table}:{target_column}-{table}:{column}.png")
+    print(f"{column} create!")
+
+
 def create_graph(table, columns):
     for column in columns:
         if column in exclusion_list[table]:
@@ -34,15 +44,14 @@ def create_graph(table, columns):
         explanatory = db_api.pick_column(table, column)
         try:
             if numpy.corrcoef(explanatory, objective)[0][1] > 0.5:
-                fig = plt.figure()
-                plt.scatter(explanatory, objective)
-                plt.ylabel(f"{target_table}:{target_column}")
-                plt.xlabel(f"{table}:{column}")
-                fig.savefig(
-                    f"./figure/{target_table}:{target_column}-{table}:{column}.png")
-                print(f"{column} create!")
-        except BaseException:
-            continue
+                scatter(explanatory, objective, table, column)
+        except TypeError:
+            if None in explanatory:
+                continue
+            explanatory = [int(re.sub(r"-|:", "", str(e)))
+                           for e in explanatory]
+            if numpy.corrcoef(explanatory, objective)[0][1] > 0.5:
+                scatter(explanatory, objective, table, column)
 
 
 if __name__ == "__main__":
