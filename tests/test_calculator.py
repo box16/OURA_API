@@ -28,6 +28,25 @@ class TestCalculator(unittest.TestCase):
         _output = [3.0, 4.0, 5.0, 6.0, 7.0]
         self.assertListEqual(calculator.m_moving_average(_input, 4), _output)
 
+    def test_create_combination_list_1(self):
+        calculator = Calculator()
+        _input = ["apple", "orange", "grape", "banana"]
+        _output = [["apple", "orange"], ["apple", "grape"], ["apple", "banana"],
+                   ["orange", "grape"], ["orange", "banana"],
+                   ["grape", "banana"]]
+        self.assertListEqual(
+            calculator.create_combination_list(
+                _input, 2), _output)
+
+    def test_create_combination_list_2(self):
+        calculator = Calculator()
+        _input = ["apple", "orange", "grape", "banana"]
+        _output = [["apple", "orange", "grape"], ["apple", "grape", "banana"],
+                   ["orange", "grape", "banana"]]
+        self.assertListEqual(
+            calculator.create_combination_list(
+                _input, 3), _output)
+
 
 if __name__ == '__main__':
     unittest.main()

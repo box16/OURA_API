@@ -46,3 +46,21 @@ class Calculator:
                     index - pick_num, index + pick_num + 1)])
                 result.append(_sum / m)
         return result
+
+    def create_combination_list(self, _list, m):
+        """渡したリストから、m個の組み合わせを全て作成し返す\n
+        input : ["apple","orange","grape","banana"] , 2
+        output : [["apple","orange"],["apple","grape"],["apple","banana"],
+                  ["orange","grape"],["orange","banana"],
+                  ["grape","banana"]]
+        nCr個の要素のリストになる\n
+        n = 渡すリストの長さ
+        r = m
+        """
+        result = []
+        for base_index in range(0, len(_list) - (m - 1)):
+            for pick_index in range(base_index + 1, len(_list)):
+                if len(_list[pick_index:pick_index + m - 1]) == (m - 1):
+                    result.append([_list[base_index]] +
+                                  _list[pick_index:pick_index + m - 1])
+        return result
