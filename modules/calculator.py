@@ -1,12 +1,12 @@
 import math
-
+import copy
 
 class Calculator:
     def __init__(self):
         pass
 
     def create_average_list(self, lists):
-        result = lists[0]
+        result = copy.copy(lists[0])
         for _list in lists[1::]:
             for index, value in enumerate(_list):
                 try:
