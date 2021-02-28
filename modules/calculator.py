@@ -64,3 +64,10 @@ class Calculator:
                     result.append([_list[base_index]] +
                                   _list[pick_index:pick_index + m - 1])
         return result
+
+    def create_sum_list(self, lists):
+        """渡されたリストのリストを各リストの合計のリストにして返す\n
+        input : [[1,2,3,4,5],[1,2,3,4,5]]
+        output : [15,15]
+        """
+        return [sum(_list) for _list in lists]

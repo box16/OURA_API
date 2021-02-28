@@ -47,6 +47,13 @@ class TestCalculator(unittest.TestCase):
             calculator.create_combination_list(
                 _input, 3), _output)
 
+    def test_create_sum_list(self):
+        calculator = Calculator()
+        _input = [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]]
+        _output = [15, 15]
+        self.assertListEqual(
+            calculator.create_sum_list(_input), _output)
+
 
 if __name__ == '__main__':
     unittest.main()
