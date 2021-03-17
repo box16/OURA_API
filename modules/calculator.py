@@ -9,17 +9,12 @@ class Calculator:
     def create_average_list(self, lists):
         """リストのリストを渡して、平均値のリストを返す\n
             in :[[1,2,3],[4,5,6]]
-            out : [2.5,3.5,4.5]
+            out : [3,5]
         """
-        result = copy.copy(lists[0])
-        for _list in lists[1::]:
-            for index, value in enumerate(_list):
-                try:
-                    result[index] += value
-                except IndexError:
-                    result.append(value)
-        list_num = len(lists)
-        return [value / list_num for value in result]
+        result = []
+        for _list in lists:
+            result.append(sum(_list) / len(_list))
+        return result
 
     def m_moving_average(self, _list, m):
         """m項移動平均を計算する\n

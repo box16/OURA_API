@@ -4,16 +4,10 @@ from modules.calculator import Calculator
 
 class TestCalculator(unittest.TestCase):
 
-    def test_create_average_list_1(self):
+    def test_create_average_list(self):
         calculator = Calculator()
-        _input = [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]]
-        _output = [1.0, 2.0, 3.0, 4.0, 5.0]
-        self.assertListEqual(calculator.create_average_list(_input), _output)
-
-    def test_create_average_list_2(self):
-        calculator = Calculator()
-        _input = [[1, 2, 3, 4, 5], [1, 2, 3]]
-        _output = [1.0, 2.0, 3.0, 2.0, 2.5]
+        _input = [[1, 2, 3], [4, 5, 6]]
+        _output = [2.0, 5.0]
         self.assertListEqual(calculator.create_average_list(_input), _output)
 
     def test_m_moving_average_odd(self):

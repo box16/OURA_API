@@ -9,8 +9,9 @@ ab_normal_column = [
     "hr_5min",
     "rmssd_5min",
     "class_5min",
-    "met_1min",
-    "date",
+    "met_1min", ]
+
+skip_column = [
     "met_min_medium_plus",
     "bedtime_start",
     "bedtime_end"]
@@ -20,52 +21,46 @@ grapher = Grapher()
 caluculator = Calculator()
 
 
-def convert_column_list(column):
-    if "," in column:
-        return [float(word) for word in column.split(",")]
-    else:
-        return [float(word) for word in column]
+def convert_abnormal_column_list(lists):
+    result = []
+    for _list in lists:
+        if "," in _list:
+            result.append([float(word) for word in _list.split(",")])
+        else:
+            result.append([float(word) for word in _list])
+    return result
 
 
 def cast_list_float(_list):
     return [float(value) for value in _list]
 
 
-def create_time_series_graph(table, column):
-    try:
-        ys = db_api.pick_column(table, column)
-        ys = [convert_column_list(y) for y in ys]
-        y_label = f"{table}:{column}"
-        average_ys = caluculator.create_average_list(ys)
-        grapher.line_graph(
-            list(
-                range(
-                    0,
-                    len(average_ys))),
-            "time",
-            average_ys,
-            y_label)
-    except TypeError:
-        pass
-
-
-def create_scatter_plot(y, y_label):
+if __name__ == "__main__":
+    data = {}
+    # データ要素を取り出す
     for table in TABLE_NAMES:
         columns = db_api.get_column_names(table)
         for column in columns:
+            _list = db_api.pick_column(table, column)
             if column in ab_normal_column:
-                create_time_series_graph(table, column)
+                _list = convert_abnormal_column_list(_list)
+                data[f"{column}_sum"] = caluculator.create_sum_list(_list)
+                data[f"{column}_average"] = caluculator.create_average_list(
+                    _list)
+            elif column == "date":
+                _list = [x.weekday() for x in _list]
+                data["weekday"] = _list
+            elif column in skip_column:
+                pass
             else:
-                x = db_api.pick_column(table, column)
-                x = cast_list_float(x)
-                x_label = f"{table}:{column}"
-                grapher.scatter_plot_with_corrcoef(x, x_label, y, y_label)
+                _list = cast_list_float(_list)
+                data[column] = _list
 
-
-if __name__ == "__main__":
-    target_table = "sleep"
-    target_column = "total"
-    y = db_api.pick_column(target_table, target_column)
-    y = cast_list_float(y)
-    y_label = f"{target_table}:{target_column}"
-    create_scatter_plot(y, y_label)
+    keys = list(data.keys())
+    combine_list = caluculator.create_combination_list(keys, 2)
+    for combi in combine_list:
+        try:
+            grapher.scatter_plot_with_corrcoef(
+                data[combi[0]], combi[0], data[combi[1]], combi[1])
+        except BaseException:
+            print(combi)
