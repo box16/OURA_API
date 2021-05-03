@@ -1,6 +1,4 @@
 import math
-import copy
-
 
 class Calculator:
     def __init__(self):

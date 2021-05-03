@@ -1,7 +1,5 @@
 from modules.oura_access import OuraAccess
 from modules.db_api import DBapi
-import datetime
-
 
 def format_activity(activity):
     activity["met_1min"] = "'" + \
